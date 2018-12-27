@@ -84,6 +84,34 @@ layout: default
             </div>
         {% endif %}
 
+        <!-- Gitalk 评论 start  -->
+        {% if site.gitalk.enable %}
+        <!-- Link Gitalk 的支持文件  -->
+        <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+        <script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+
+        <div id="gitalk-container"></div>
+        <script type="text/javascript">
+            var gitalk = new Gitalk({
+
+                // gitalk的主要参数
+                clientID: `da91910585c3fa341fe6`,
+                clientSecret: `8a3398a2e38c056a9baa12dd8fa8e3290a286071`,
+                repo: `linyiplus.github.io`,
+                owner: 'linyi4843',
+                admin: ['linyi4843'],
+                id: 'window.location.pathname',
+
+            });
+            gitalk.render('gitalk-container');
+        </script>
+        {% endif %}
+        <!-- Gitalk end -->
+
+
+
+
+
     <!-- Sidebar Container -->
             <div class="
                 col-lg-8 col-lg-offset-2
