@@ -20,7 +20,12 @@ twitter_username:   huxpro
 #facebook_username:  huxpro
 #linkedin_username:  firstname-lastname-idxxxx
 
-gitalk: true
+gitalk:
+  owner: linyi4843
+  repo: linyi4843.github.io
+  clientID: da91910585c3fa341fe6
+  clientSecret: 8a3398a2e38c056a9baa12dd8fa8e3290a286071
+  admin: linyi4843
 
 # Build settings
 # from 2016, 'pygments' is unsupported on GitHub Pages. Use 'rouge' for highlighting instead.
