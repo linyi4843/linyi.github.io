@@ -7,8 +7,9 @@ author:     "linyi"
 header-img: "img/post-bg-alitrip.jpg"
 catalog: true
 tags:
-    - start
-    - Meta
+    - docker
+    - zookeeper
+    - kafka
 ---
 
 > “Never give up. ”
@@ -16,7 +17,7 @@ tags:
 
 ## 前言
 
-&nbsp:&nbsp:因工作需求,环境需要搭建zookeeper,kafka集群,也是刚接触从零开始搭建,此文章是用docker搭建的单机版,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;因工作需求,环境需要搭建zookeeper,kafka集群,也是刚接触从零开始搭建,此文章是用docker搭建的单机版,
 搭建过程还是比较顺利的,此前用传统方式搭建了一遍,后面才知道用docker也可以,用了docker之后发现很方便
 
 <p id = "build"></p>
