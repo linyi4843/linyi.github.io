@@ -71,6 +71,8 @@ rewind(){ //重绕缓冲区并将位置设为0,标识丢弃(-1),limit不变
 <p id = "build"></p>
 ---
 
+### 具体API
+
 判断是否制度 boolean isReadOnly()  
 <p id = "build"></p>
 ---
