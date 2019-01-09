@@ -1,7 +1,7 @@
 ---
 
 layout:     post
-title:      "NIO Socket (一)"
+title:      "NIO Socket (一)缓冲区的使用"
 subtitle:   " \"nio和socket\""
 date:       2019-1-6 15:07:00
 author:     "linyi"
@@ -15,7 +15,7 @@ tags:
 
 > “Come on!. ”
 
-## 缓冲区API   
+## Buffet类   
 ```
     ByteBuffer
     CharBuffer
