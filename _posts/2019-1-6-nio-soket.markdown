@@ -323,5 +323,8 @@ capacity可以不同
 
 **final int length()** 获取字符串长度  
 
---over
+<p id = "build"></p>
+---
+
+看了缓冲区的使用,顺便把知识总结整理一下  --over
 
