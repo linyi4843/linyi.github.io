@@ -73,43 +73,46 @@ rewind(){ //重绕缓冲区并将位置设为0,标识丢弃(-1),limit不变
 
 ### 具体API
 
-判断是否制度 boolean isReadOnly()  
+**boolean isReadOnly()**  判断是否制度 
 <p id = "build"></p>
 ---
 
-直接缓冲区 boolean isDirect()  
+**boolean isDirect()**  直接缓冲区 
 非直接缓冲区储存数据时会先把数据放入jvm中的中间缓冲区中,再写入磁盘,使用直接缓冲区,省略了中间缓冲区的步骤,提高了数据的吞吐量,提高内存占用率
 <p id = "build"></p>
 ---
 
-判断是否有底层数组实现 final boolean hasArray()
+**final boolean hasArray()**  判断是否有底层数组实现 
 <p id = "build"></p>
 ---
 
-获取偏移量 final int arrayOffset()  
+**final int arrayOffset()**  获取偏移量 
 一般情况为0
 <p id = "build"></p>
 ---
 
 创建缓冲区  
-创建非直接缓冲区 allocate(int capacity) 缓冲区类型为 HeapByteBuffer  
-创建直接缓冲区 allocateDirect(int capacity) 缓冲区类型为 DiretByteBuffer  
+**allocate(int capacity)** 
+创建非直接缓冲区  缓冲区类型为 **HeapByteBuffer**  
+**allocateDirect(int capacity)** 
+创建直接缓冲区 缓冲区类型为 **DirectByteBuffer**  
 直接缓冲区效率更高
 <p id = "build"></p>
 ---
 
-获取剩余空间大小  final int remaining()   
+**final int remaining()**   获取剩余空间大小  
 ps : limit - position
 <p id = "build"></p>
 ---
 
-判断当前位置与现值之间是否有剩余元素 final boolean hasRemaining()  
+**final boolean hasRemaining()**  判断当前位置与现值之间是否有剩余元素 
 <p id = "build"></p>
 ---
 
 warp的数据处理  
-warp(byte[] array) 将数组包装到缓冲区中 capacity,limit为array.length,position = 0 ,底层实现为数组,arrayOffset = 0;  
-wrap(byte[] array,int offset, int length)  
+**warp(byte[] array)** 
+将数组包装到缓冲区中 capacity,limit为array.length,position = 0 ,底层实现为数组,arrayOffset = 0;  
+**wrap(byte[] array,int offset, int length)**  
 offset为0,底层实现为传入数组   
 参数说明:  
 array 字节数组  
@@ -120,7 +123,7 @@ length limit = offset + length; 非负且不大与array.length - offset
 
 **abstract Buffer put(byte[] b)**   
 将数组写入当前位置 且 position递增  
-abstract byte get()   
+**abstract byte get()**   
 读取当前位置的数据 且position递增
 <p id = "build"></p>
 ---
