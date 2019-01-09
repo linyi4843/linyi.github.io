@@ -116,14 +116,14 @@ length limit = offset + length; 非负且不大与array.length - offset
 <p id = "build"></p>
 ---
 
-##### abstract Buffer put(byte[] b)   
+**abstract Buffer put(byte[] b)**   
 将数组写入当前位置 且 position递增  
 abstract byte get()   
 读取当前位置的数据 且position递增
 <p id = "build"></p>
 ---
 
-##### put(byte[] src,int offset, int length)相对批量put方法   
+**put(byte[] src,int offset, int length)**  相对批量put方法   
 参数说明:   
 src 字节数组  
 offset 要读取的第一个字节在数组中的偏移量(不是缓冲区的偏移)非负且大于 src.length  
@@ -133,8 +133,7 @@ length 给定数组读取的数量 非负大于src.length-offset
 1: offset + length > src.length 会抛出 INdexOutBoundsException  
 2: length > buffer.remaining 会抛出 BufferOverFlowException  
 
-##### get(byte[] dst, int offset, int length)  
-相对批量 get方法  
+**get(byte[] dst, int offset, int length)**  相对批量 get方法  
 参数说明:  
 dst 同上  
 offset 同上   
