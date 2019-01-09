@@ -116,35 +116,35 @@ length limit = offset + length; 非负且不大与array.length - offset
 <p id = "build"></p>
 ---
 
-abstract Buffer put(byte[] b)   
+##### abstract Buffer put(byte[] b)   
 将数组写入当前位置 且 position递增  
 abstract byte get()   
 读取当前位置的数据 且position递增
 <p id = "build"></p>
 ---
 
-put(byte[] src,int offset, int length)相对批量put方法   
+##### put(byte[] src,int offset, int length)相对批量put方法   
 参数说明:   
 src 字节数组  
 offset 要读取的第一个字节在数组中的偏移量(不是缓冲区的偏移)非负且大于 src.length  
 length 给定数组读取的数量 非负大于src.length-offset
 
-##### FAQ:
+**FAQ:**
 1: offset + length > src.length 会抛出 INdexOutBoundsException  
 2: length > buffer.remaining 会抛出 BufferOverFlowException  
 
-get(byte[] dst, int offset, int length)  
+##### get(byte[] dst, int offset, int length)  
 相对批量 get方法  
 参数说明:  
 dst 同上  
 offset 同上   
 length 写入给给定数组的最大字节数量 非负大于src.length-offset
 
-##### FAQ:
+**FAQ:**
 1: offset + length > dst.length 会抛出 INdexOutBoundsException  
 2: length > buffer.remaining 会抛出 **BufferUnderFlowException**
 
-##### ps:
+**ps:**
 ``` java
     byte[] b1 = {1,2,3,4,5,6,7}
     byte[] b2 = {55,66,77,88}
@@ -164,8 +164,10 @@ length 写入给给定数组的最大字节数量 非负大于src.length-offset
 <p id = "build"></p>
 ---
 
-put(byte[] src) 将数组写入当前位置  
-get(byte[] dst) 读取数组到当前位置
+##### put(byte[] src)  
+将数组写入当前位置  
+##### get(byte[] dst)  
+读取数组到当前位置
 ##### FAQ:
 缓冲区remaining小于数组  
 put抛出: BufferOverFlowException  
@@ -173,12 +175,15 @@ get抛出: BufferUnderFlowException
 <p id = "build"></p>
 ---
 
-put(int index,byte b) 绝对put方法,将字节写入索引指定位置 position位置不变  
-get(int index) 绝对get方法,读取指定位置字节 position位置不变
+##### put(int index,byte b)  
+绝对put方法,将字节写入索引指定位置 position位置不变  
+##### get(int index)  
+绝对get方法,读取指定位置字节 position位置不变
 <p id = "build"></p>
 ---
 
-put(ByteBuffer src) 将给定缓冲区的数据写入缓冲区当前位置,两个缓冲区位置都加给定缓冲区的remaininhg
+##### put(ByteBuffer src)  
+将给定缓冲区的数据写入缓冲区当前位置,两个缓冲区位置都加给定缓冲区的remaininhg
 ``` java
     byte[] array1 = {1,2,3,4,5,6,7,8};
     ByteBuffer b1 = ByteBuffer.wrap(array1);
@@ -195,7 +200,7 @@ put(ByteBuffer src) 将给定缓冲区的数据写入缓冲区当前位置,两�
 <p id = "build"></p>
 ---
 
-##### putType(),getType
+**putType(),getType**
 **位置+(基本类型字节数)**
 ```
 putChar(char value) 相对方法,按照当前字节顺序写入缓冲区当前位置,位置加字节数(2)  
@@ -212,11 +217,12 @@ putLong(int index,long value)
 putShort(short value)  
 putShort(int index,short value)  
 ```
-#### **同char**
+**同char**
 <p id = "build"></p>
 ---
 
-**slice()** 创建新的缓冲区,从当前缓冲区的位置开始,该缓冲区有独立的位置,限制,标记,位置默认为0,缓冲区性质依照当前缓冲区(直接,只读) 
+##### slice()  
+创建新的缓冲区,从当前缓冲区的位置开始,该缓冲区有独立的位置,限制,标记,位置默认为0,缓冲区性质依照当前缓冲区(直接,只读) 
 使用slice()方法后arrayOffset()值不为0,如下
 ``` java
     byte[] array1 = {1,2,3,4,5,6,7,8};
@@ -228,7 +234,7 @@ putShort(int index,short value)
 <p id = "build"></p>
 ---
 
-asCharBuffer() 中文处理  
+##### asCharBuffer() 中文处理  
 "中文".getBytes("utf-8");  
 CharBuffer cf = Charset.forName("utf-8").decode(**youByteBuffer**);
 <p id = "build"></p>
@@ -244,7 +250,8 @@ asShortBuffer()
 <p id = "build"></p>
 ---
 
-order() 设置字节顺序 默认为顺序  
+##### order()  
+设置字节顺序 默认为顺序  
 顺序: ByteOrder.BIG_ENDIAN  
 逆序: ByteOrder.LITTLE_ENDIAN  
 因cpu不同,读取顺序不同可从高位或者低位读取,一般字节从中间分开,左边为高位,右边为低位
@@ -255,7 +262,8 @@ asReadOnlyBuffer() 创建共享此缓冲区内容为只读状态的缓冲区
 <p id = "build"></p>
 ---
 
-压缩缓冲区 compact()  
+##### compact()  
+压缩缓冲区
 根绝 opsotion 位置进行压缩  
 获取位置之后的数据,并且根据位置的值读取缓冲区最后的数据  
 ps: 1,2,3,4,5 position = 2;  
@@ -263,7 +271,8 @@ ps: 1,2,3,4,5 position = 2;
 <p id = "build"></p>
 ---
 
-boolean equals(),int compareTo() 比较两个缓冲区的内容  
+#####boolean equals(),int compareTo()  
+比较两个缓冲区的内容  
 equals:  
 1: 是否为自身  
 2: 是否为ByteBuffer实例  
@@ -280,37 +289,47 @@ capacity可以不同
 <p id = "build"></p>
 ---
 
-ByteBuffer duplicate() 复制缓冲区  
+##### ByteBuffer duplicate()  
+复制缓冲区  
 同使用一个原数组,数组改变,原缓冲区和复制的缓冲区数据都改变
 <p id = "build"></p>
 ---
 
+##### allocate(youbyteBuffer.capavity + size) 
+size扩容大小  
 对缓冲区的扩容  
 等于创建新的缓冲区   
-allocate(youbyteBuffer.capavity + size) size扩容大小
 <p id = "build"></p>
 ---
 
-重载  
+## 重载  
 CharBuffer append(char c) 相当于 dst.put(c)  
 CharBuffer append(CharSequence csq) 相当于 dst.put(csq.toString())  可能没添加整个序列 取决于缓冲区的位置  
 CharBuffer append(CharSequence csq,int start ,int end) 相当于 dst.put(csq.subSequence(start,end).toString())//截取
 <p id = "build"></p>
 ---
 
-final char charAt(int index) 读取指定索引位置字符
+##### final char charAt(int index)  
+读取指定索引位置字符
 <p id = "build"></p>
 ---
 
-put(String src) 将给定字符串复制到当前位置  
-int read(CharBuffer target) 将当前缓冲区字符写到指定缓冲区的当前位置  
-subSequence(int start,int end) 创建此缓冲区的指定序列,和原缓冲区数据共享,位置为原position + start,limit为position + end
+##### put(String src)  
+将给定字符串复制到当前位置  
+##### int read(CharBuffer target)  
+将当前缓冲区字符写到指定缓冲区的当前位置  
+##### subSequence(int start,int end)  
+创建此缓冲区的指定序列,和原缓冲区数据共享,位置为原position + start,limit为position + end
 <p id = "build"></p>
 ---
 
-static CharBuffer wrap(CharSequence csq,int start,int end)   
+##### static CharBuffer wrap(CharSequence csq,int start,int end)   
 将字符串顺序包装到缓冲区中,字符串内容长度为csq.length,位置为start,限制end,标记未定义
 <p id = "build"></p>
 ---
 
-final int length() 获取字符串长度
+##### final int length() 
+获取字符串长度  
+
+--over
+
