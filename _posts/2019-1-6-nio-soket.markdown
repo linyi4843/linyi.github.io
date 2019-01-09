@@ -164,25 +164,25 @@ length 写入给给定数组的最大字节数量 非负大于src.length-offset
 <p id = "build"></p>
 ---
 
-##### put(byte[] src)  
+**put(byte[] src)**  
 将数组写入当前位置  
-##### get(byte[] dst)  
+**get(byte[] dst)**  
 读取数组到当前位置
-##### FAQ:
+**FAQ:**
 缓冲区remaining小于数组  
 put抛出: BufferOverFlowException  
 get抛出: BufferUnderFlowException
 <p id = "build"></p>
 ---
 
-##### put(int index,byte b)  
+**put(int index,byte b)**  
 绝对put方法,将字节写入索引指定位置 position位置不变  
-##### get(int index)  
+**get(int index)**  
 绝对get方法,读取指定位置字节 position位置不变
 <p id = "build"></p>
 ---
 
-##### put(ByteBuffer src)  
+**put(ByteBuffer src)**  
 将给定缓冲区的数据写入缓冲区当前位置,两个缓冲区位置都加给定缓冲区的remaininhg
 ``` java
     byte[] array1 = {1,2,3,4,5,6,7,8};
@@ -221,7 +221,7 @@ putShort(int index,short value)
 <p id = "build"></p>
 ---
 
-##### slice()  
+**slice()**  
 创建新的缓冲区,从当前缓冲区的位置开始,该缓冲区有独立的位置,限制,标记,位置默认为0,缓冲区性质依照当前缓冲区(直接,只读) 
 使用slice()方法后arrayOffset()值不为0,如下
 ``` java
@@ -234,23 +234,23 @@ putShort(int index,short value)
 <p id = "build"></p>
 ---
 
-##### asCharBuffer() 中文处理  
+**asCharBuffer()** 中文处理  
 "中文".getBytes("utf-8");  
 CharBuffer cf = Charset.forName("utf-8").decode(**youByteBuffer**);
 <p id = "build"></p>
 ---
 
 转换为其他类型缓冲区  
-asDoubleBuffer()  
+**asDoubleBuffer()  
 asFloatBuffer()  
 asIntBuffer()  
 asLongBuffer()  
-asShortBuffer()  
+asShortBuffer()**  
 缓冲区位置从当前缓冲区位置开始,位置,限制,标记是相互独立的,新缓冲区位置为0,容量和限制为缓冲区剩余字节数的1/(类型字节),状态也由原缓冲区决定(直接缓冲区,是否只读)
 <p id = "build"></p>
 ---
 
-##### order()  
+**order()**  
 设置字节顺序 默认为顺序  
 顺序: ByteOrder.BIG_ENDIAN  
 逆序: ByteOrder.LITTLE_ENDIAN  
@@ -258,12 +258,11 @@ asShortBuffer()
 <p id = "build"></p>
 ---
 
-asReadOnlyBuffer() 创建共享此缓冲区内容为只读状态的缓冲区
+**asReadOnlyBuffer()** 创建共享此缓冲区内容为只读状态的缓冲区
 <p id = "build"></p>
 ---
 
-##### compact()  
-压缩缓冲区
+**compact()**  压缩缓冲区
 根绝 opsotion 位置进行压缩  
 获取位置之后的数据,并且根据位置的值读取缓冲区最后的数据  
 ps: 1,2,3,4,5 position = 2;  
@@ -271,16 +270,15 @@ ps: 1,2,3,4,5 position = 2;
 <p id = "build"></p>
 ---
 
-#####boolean equals(),int compareTo()  
-比较两个缓冲区的内容  
-equals:  
+**boolean equals(),int compareTo()**  比较两个缓冲区的内容  
+**equals:**  
 1: 是否为自身  
 2: 是否为ByteBuffer实例  
 3: remaining是否一样  
 4: 两个缓冲区position,limit之间的数据是否一样  
 capacity可以不同
 
-compareTo:  
+**compareTo:**  
 比较两个缓冲区的方法是按照字典顺序比较他们的剩余元素顺序,而不是每个序列在其对应缓冲区的起始位置  
 1: 判断两个ByteBuffer的范围是从当前ByteBuffer对象的前位置开始,以两个ByteBuffer对象最小的remaining()值结束说明判断的范围是remaining的交集  
 2: 如果在开始和结束范围之间有一个字节不同,则返回两者的减数  
@@ -289,47 +287,41 @@ capacity可以不同
 <p id = "build"></p>
 ---
 
-##### ByteBuffer duplicate()  
-复制缓冲区  
+**ByteBuffer duplicate()**  复制缓冲区  
 同使用一个原数组,数组改变,原缓冲区和复制的缓冲区数据都改变
 <p id = "build"></p>
 ---
 
-##### allocate(youbyteBuffer.capavity + size) 
-size扩容大小  
+**allocate(youbyteBuffer.capavity + size)** size扩容大小  
 对缓冲区的扩容  
 等于创建新的缓冲区   
 <p id = "build"></p>
 ---
 
-## 重载  
-CharBuffer append(char c) 相当于 dst.put(c)  
-CharBuffer append(CharSequence csq) 相当于 dst.put(csq.toString())  可能没添加整个序列 取决于缓冲区的位置  
-CharBuffer append(CharSequence csq,int start ,int end) 相当于 dst.put(csq.subSequence(start,end).toString())//截取
+**重载**  
+**CharBuffer append(char c)** 相当于 dst.put(c)  
+**CharBuffer append(CharSequence csq)** 相当于 dst.put(csq.toString())  可能没添加整个序列 取决于缓冲区的位置  
+**CharBuffer append(CharSequence csq,int start ,int end)** 相当于 dst.put(csq.subSequence(start,end).toString())//截取
 <p id = "build"></p>
 ---
 
-##### final char charAt(int index)  
-读取指定索引位置字符
+**final char charAt(int index)**  读取指定索引位置字符
 <p id = "build"></p>
 ---
 
-##### put(String src)  
-将给定字符串复制到当前位置  
-##### int read(CharBuffer target)  
-将当前缓冲区字符写到指定缓冲区的当前位置  
-##### subSequence(int start,int end)  
+**put(String src)**  将给定字符串复制到当前位置  
+**int read(CharBuffer target)**  将当前缓冲区字符写到指定缓冲区的当前位置  
+**subSequence(int start,int end)**  
 创建此缓冲区的指定序列,和原缓冲区数据共享,位置为原position + start,limit为position + end
 <p id = "build"></p>
 ---
 
-##### static CharBuffer wrap(CharSequence csq,int start,int end)   
+**static CharBuffer wrap(CharSequence csq,int start,int end)**   
 将字符串顺序包装到缓冲区中,字符串内容长度为csq.length,位置为start,限制end,标记未定义
 <p id = "build"></p>
 ---
 
-##### final int length() 
-获取字符串长度  
+**final int length()** 获取字符串长度  
 
 --over
 
