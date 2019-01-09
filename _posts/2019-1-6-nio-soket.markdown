@@ -73,7 +73,7 @@ rewind(){ //重绕缓冲区并将位置设为0,标识丢弃(-1),limit不变
 
 ### 具体API
 
-**boolean isReadOnly()**  判断是否制度 
+**boolean isReadOnly()**  判断是否只读 
 <p id = "build"></p>
 ---
 
@@ -105,7 +105,7 @@ ps : limit - position
 <p id = "build"></p>
 ---
 
-**final boolean hasRemaining()**  判断当前位置与现值之间是否有剩余元素 
+**final boolean hasRemaining()**  判断当前位置与限制之间是否有剩余元素 
 <p id = "build"></p>
 ---
 
@@ -122,7 +122,7 @@ length limit = offset + length; 非负且不大与array.length - offset
 ---
 
 **abstract Buffer put(byte[] b)**   
-将数组写入当前位置 且 position递增  
+将数组写入当前位置 且position递增  
 **abstract byte get()**   
 读取当前位置的数据 且position递增
 <p id = "build"></p>
@@ -171,7 +171,7 @@ length 写入给给定数组的最大字节数量 非负大于src.length-offset
 **put(byte[] src)**  
 将数组写入当前位置  
 **get(byte[] dst)**  
-读取数组到当前位置
+读取数组到当前位置  
 **FAQ:**
 缓冲区remaining小于数组  
 put抛出: BufferOverFlowException  
@@ -180,9 +180,9 @@ get抛出: BufferUnderFlowException
 ---
 
 **put(int index,byte b)**  
-绝对put方法,将字节写入索引指定位置 position位置不变  
+绝对put方法,将字节写入索引指定位置 position不变  
 **get(int index)**  
-绝对get方法,读取指定位置字节 position位置不变
+绝对get方法,读取指定位置字节 position不变
 <p id = "build"></p>
 ---
 
@@ -204,12 +204,11 @@ get抛出: BufferUnderFlowException
 <p id = "build"></p>
 ---
 
-**putType(),getType**
-**位置+(基本类型字节数)**
+**putType(),getType()**  
 ``` java
-//相对方法,按照当前字节顺序写入缓冲区当前位置,位置加字节数(2)  
+//相对方法,按照当前字节顺序写入缓冲区当前位置,然后将当前位置 + 2(char字节数)  
 putChar(char value)  
-//绝对方法,按照当前字节顺序写入缓冲区指定索引位置,位置加字节数(2)
+//绝对方法,按照当前字节顺序写入缓冲区指定索引位置,然后将当前位置 + 2(char字节数)
 putChar(int index, char value)   
 
 putDouble(double value)  
@@ -221,9 +220,10 @@ putInt(int index,int value)
 putLong(long value)  
 putLong(int index,long value)  
 putShort(short value)  
-putShort(int index,short value)  
+putShort(int index,short value) 
+
+//使用同 char 
 ```
-**同char**
 <p id = "build"></p>
 ---
 
@@ -241,8 +241,8 @@ putShort(int index,short value)
 ---
 
 **asCharBuffer()** 中文处理  
-"中文".getBytes("utf-8");  
-CharBuffer cf = Charset.forName("utf-8").decode(**youByteBuffer**);
+1: "中文".getBytes("utf-8");  
+2: CharBuffer cf = Charset.forName("utf-8").decode(**youByteBuffer**);
 <p id = "build"></p>
 ---
 
@@ -252,7 +252,7 @@ asFloatBuffer()
 asIntBuffer()  
 asLongBuffer()  
 asShortBuffer()**  
-缓冲区位置从当前缓冲区位置开始,位置,限制,标记是相互独立的,新缓冲区位置为0,容量和限制为缓冲区剩余字节数的1/(类型字节),状态也由原缓冲区决定(直接缓冲区,是否只读)
+缓冲区位置从当前缓冲区位置开始,位置,限制,标记是相互独立的,新缓冲区位置为0,容量和限制为缓冲区剩余字节数的1/(类型字节数),状态也由原缓冲区决定(直接缓冲区,是否只读)
 <p id = "build"></p>
 ---
 
