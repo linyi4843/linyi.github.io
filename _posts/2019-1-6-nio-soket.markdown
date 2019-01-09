@@ -203,9 +203,11 @@ get抛出: BufferUnderFlowException
 
 **putType(),getType**
 **位置+(基本类型字节数)**
-```
-putChar(char value) 相对方法,按照当前字节顺序写入缓冲区当前位置,位置加字节数(2)  
-putChar(int index, char value) 绝对方法,按照当前字节顺序写入缓冲区指定索引位置,位置加字节数(2)
+``` java
+//相对方法,按照当前字节顺序写入缓冲区当前位置,位置加字节数(2)  
+putChar(char value)  
+//绝对方法,按照当前字节顺序写入缓冲区指定索引位置,位置加字节数(2)
+putChar(int index, char value)   
 
 putDouble(double value)  
 putDouble(int index,double value)  
