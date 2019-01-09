@@ -39,7 +39,7 @@ ps: (没BooleanBuffer,StringBuffer)
 
 0<= Mark <= position <= limit <= capacity
 
-```(java)
+``` java
 clear(){ //恢复默认
     position = 0;
     limit = capacity;
@@ -123,7 +123,7 @@ length 写入给给定数组的最大字节数量 非负大于src.length-offset
 2: length > buffer.remaining 会抛出 **BufferUnderFlowException**
 
 ##### ps:
-```(java)
+``` java
     byte[] b1 = {1,2,3,4,5,6,7}
     byte[] b2 = {55,66,77,88}
     ByteBuffer byteBuffer = ByteBuffer.allocate(10);
@@ -151,7 +151,7 @@ put(int index,byte b) 绝对put方法,将字节写入索引指定位置 position
 get(int index) 绝对get方法,读取指定位置字节 position位置不变
 ___
 put(ByteBuffer src) 将给定缓冲区的数据写入缓冲区当前位置,两个缓冲区位置都加给定缓冲区的remaininhg
-```(java)
+``` java
     byte[] array1 = {1,2,3,4,5,6,7,8};
     ByteBuffer b1 = ByteBuffer.wrap(array1);
     byte[] array2 = {55,66,77};
@@ -185,7 +185,7 @@ putShort(int index,short value)
 ___
 **slice()** 创建新的缓冲区,从当前缓冲区的位置开始,该缓冲区有独立的位置,限制,标记,位置默认为0,缓冲区性质依照当前缓冲区(直接,只读)
 使用slice()方法后arrayOffset()值不为0,如下
-```(java)
+``` java
     byte[] array1 = {1,2,3,4,5,6,7,8};
     ByteBuffer b1 = ByteBuffer.wrap(array1);
     b1.position(5);
