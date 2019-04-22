@@ -1,0 +1,106 @@
+---
+layout:     post
+title:      "java pdf "
+subtitle:   " \"pdf\""
+date:       2019-4-22 21:07:00
+author:     "linyi"
+header-img: "img/post-bg-alitrip.jpg"
+catalog: true
+tags:
+    - java
+    - pdf
+---
+
+> “Never give up. ”
+
+
+## 前言
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;根据模板生成pdf
+<p id = "build"></p>
+---
+
+## 正文
+
+#### 依赖
+```java
+    <dependency>
+        <groupId>com.itextpdf</groupId>
+        <artifactId>itextpdf</artifactId>
+        <version>5.5.10</version>
+    </dependency>
+    <dependency>
+        <groupId>com.itextpdf</groupId>
+        <artifactId>itext-asian</artifactId>
+        <version>5.2.0</version>
+    </dependency>
+```
+#### 标识
+  需要用到pdf表单,根据表单填充,根据模板表单名称填充,可用Adobe Acrobat Pro编辑
+  
+#### 代码
+
+``` java
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.pdf.*;
+
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+public class PdfUtils {
+    // 利用模板生成pdf
+    private static void fillTemplate() {
+        // 模板路径
+        String templatePath = "/Users/linyi/Downloads/wa.pdf";
+        // 生成的新文件路径
+        String newPDFPath = "/Users/linyi/Downloads/fei.pdf";
+        PdfReader reader;
+        FileOutputStream out;
+        ByteArrayOutputStream bos;
+        PdfStamper stamper;
+        try {
+            out = new FileOutputStream(newPDFPath);// 输出流
+            reader = new PdfReader(templatePath);// 读取pdf模板
+            bos = new ByteArrayOutputStream();
+            stamper = new PdfStamper(reader, bos);
+            AcroFields form = stamper.getAcroFields();
+            String[] str = {"你", "你也是一个靓仔啊"};
+            int i = 0;
+            BaseFont bf = BaseFont.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
+            //s 表单名称
+            for (String s : form.getFields().keySet()) {
+                form.setFieldProperty(s, "textfont", bf, null);
+                form.setField(s, str[i++]);
+            }
+            stamper.setFormFlattening(true);// 如果为false那么生成的PDF文件还能编辑，一定要设为true
+            stamper.close();
+            Document doc = new Document();
+            PdfCopy copy = new PdfCopy(doc, out);
+            doc.open();
+            PdfImportedPage importPage = copy.getImportedPage(new PdfReader(bos.toByteArray()), 1);
+            copy.addPage(importPage);
+            doc.close();
+        } catch (IOException e) {
+            System.out.println(1);
+        } catch (DocumentException e) {
+            System.out.println(2);
+        }
+    }
+
+
+    public static void main(String[] args) {
+        fillTemplate();
+    }
+}
+```
+
+ 
+## 后记
+
+over
+
+—— linyi 2019.4.22
+
+
