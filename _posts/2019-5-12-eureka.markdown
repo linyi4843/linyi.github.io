@@ -36,6 +36,7 @@ eureka,在服务断开连接之后,还在控制台显示,而consul控制台会�
 
 #### 依赖
 ```java
+
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -81,7 +82,7 @@ eureka,在服务断开连接之后,还在控制台显示,而consul控制台会�
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud.v ersion}</version>
+                <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -97,6 +98,7 @@ eureka,在服务断开连接之后,还在控制台显示,而consul控制台会�
         </plugins>
     </build>
 </project>
+
 ```
 创建eureka的module项目,继承自父项目
 
@@ -162,7 +164,7 @@ eureka:
     fetchRegistry: false
     serviceUrl:
       defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
-# 8761   8666
+
 spring:
   application:
     name: eurka-server
