@@ -1,0 +1,224 @@
+---
+layout:     post
+title:      "springcloud eureka "
+subtitle:   " \"eureka\""
+date:       2019-5-12 21:07:00
+author:     "linyi"
+header-img: "img/post-bg-alitrip.jpg"
+catalog: true
+tags:
+    - java
+    - springcloud
+    - eureka
+---
+
+> “Happy life,happy day ”
+
+
+## 前言
+
+eureka 小记 
+
+去年八九月份,搞过一次springcloud  至今未用,最近捡起来
+erueka,服务注册中心,和zookeeper,etcd,consul差不多,但也有差异,最先看的eureka,consul,个人更喜欢consul
+eureka,在服务断开连接之后,还在控制台显示,而consul控制台会持续心跳检测,在服务断开连接之后,控制台会把断开连接的提醒出来,很直观,eureka,就还在列表中,consul还可以直接使用配置中心,热刷新
+(个人观点)
+
+
+<p id = "build"></p>
+---
+
+## 正文
+在后续还有其他章节,全部都在一个工程中完成
+搞一个maven工程,删除src, 只做父依赖
+这里使用springcloud 的Greenwich SR1 版本
+
+
+#### 依赖
+```java
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.bad.man</groupId>
+    <artifactId>bad-man</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.4.RELEASE</version>
+    </parent>
+
+    <modules>
+        <module>eureka-server</module>
+        <module>service-hi</module>
+        <module>serice-feign</module>
+        <module>service-config</module>
+        <module>service-conf-client</module>
+    </modules>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <spring-cloud.version>Greenwich.SR1</spring-cloud.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.v ersion}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+```
+创建eureka的module项目,继承自父项目
+
+依赖 
+
+加上 eureka 依赖
+``` java
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.bad.man</groupId>
+        <artifactId>bad-man</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <groupId>com.bad.man</groupId>
+    <artifactId>eureka-server</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <name>eureka-server</name>
+    <description>Demo project for Spring Boot</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>
+
+```
+
+
+#### 代码
+一个注解
+
+``` java
+@SpringBootApplication
+@EnableEurekaServer
+public class EurekaServerApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(EurekaServerApplication.class, args);
+    }
+
+}
+
+```
+配置文件
+``` java
+server:
+  port: 8761
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+# 8761   8666
+spring:
+  application:
+    name: eurka-server
+```
+ 启动  ok  
+ 访问端口,看到界面就ok了
+ 
+可以加访问权限
+这里用到security
+
+``` java
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+```
+
+这里需要手写一个类作为配置
+``` java
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        // Configure HttpSecurity as needed (e.g. enable http basic).
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER);
+        http.csrf().disable();
+        //注意：为了可以使用 http://${user}:${password}@${host}:${port}/eureka/ 这种方式登录,所以必须是httpBasic,
+        // 如果是form方式,不能使用url格式登录
+        http.authorizeRequests().anyRequest().authenticated().and().httpBasic();
+
+
+    }
+}
+```
+
+最后配置yml 加入
+``` java
+spring
+  security:
+    user:
+      name: admin
+      password: admin
+```
+
+就可以看到重启项目  就可以看到登陆页面
+## 后记
+
+over
+
+—— linyi 2019.5.12
+
+
