@@ -35,8 +35,8 @@ eureka,在服务断开连接之后,还在控制台显示,而consul控制台会�
 
 
 #### 依赖
-```java
 
+``` java
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
