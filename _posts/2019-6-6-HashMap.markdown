@@ -26,11 +26,11 @@ tags:
  
 ### HashMap的内部实现: <br> 
  
- HashMap的是给予hashing原理实现,当通过put存储对象时,会先通过k计算出hashcode值,然后通过hashcode值确定相应哈希桶的位置,然后将entry储存进去,当然get的时候也通过值计算hashcode值来确定哈希桶来获取对应的值 
+ HashMap的是给予hashing原理实现,当通过put存储对象时,会先通过k计算出hashcode值,然后通过hashcode值确定相应哈希桶的位置,然后将node储存进去,当然get的时候也通过值计算hashcode值来确定哈希桶来获取对应的值 
  
 ### 当两个值的hashcode相等会如何: <br>
  
- 当hashcode相同时,哈希桶也相同,这是就发生哈希碰撞,产生链表,两个entry存于链表中,而当链表大于8就会改变为红黑树结构(1.8)
+ 当hashcode相同时,哈希桶也相同,这是就发生哈希碰撞,产生链表,两个node存于链表中,而当链表大于8就会改变为红黑树结构(1.8)
      
 ### 当两个值的hashcode相同,如何获取正确的值: <br>
  
@@ -38,7 +38,7 @@ tags:
  
 ### HashMap超出负载因子的定义会怎么办: <br> 
  
- HashMap的容量超过0.75时会进行rehash来扩容为原容量的两倍,再用hash算法算出hashcode,找到新的哈希桶并将entry放入,相当消耗性能,所以一般要初始化HashMap容量((储存数量/负载因子)+1),不能确定就默认16
+ HashMap的容量超过0.75时会进行rehash来扩容为原容量的两倍,再用hash算法算出hashcode,找到新的哈希桶并将node放入,相当消耗性能,所以一般要初始化HashMap容量((储存数量/负载因子)+1),不能确定就默认16
  扩容期间链表中的元素顺序会反过来,放到新的哈希桶的时候,HashMap会将元素放在头部,并不会放在尾部,防止尾部遍历
  
 ### 多线程下HashMap会存在竞争问题: (?? 多线程为什么要用HashMap)<br> 
@@ -56,7 +56,7 @@ tags:
  
 ### HashMap线程安全吗,多线程下存在什么问题: <br> 
  
- HashMap在并发执行put操作时会引起死循环,是因为多线程会导致HashMap的Entry链表形成环,一旦成环,Entry的next节点永远不为空,产生死循环,cpu猛涨
+ HashMap在并发执行put操作时会引起死循环,是因为多线程会导致HashMap的node链表形成环,一旦成环,node的next节点永远不为空,产生死循环,cpu猛涨
  
 ### 之前看到一个很好的数组,链表,哈希的区分栗子: <br>
  
