@@ -92,6 +92,10 @@ tags:
    实现方法主要是根据JDK动态代理来实现,mybatis讲我们设置好的扫描包路径下的接口解析成代理工厂对象(MapperProxyFactory )
    之后创建接口代理类,然后判断namespace是否有同名,然后生成接口动态代理类,执行invoke方法,再执行execute执行语句
 
+
+## 分页插件pageHelper原理
+  流程是pageHelper将传来的从参数放到page对象中,然后将page放入ThreadLocal中,作为副本变量,当前线程有效,然后mybatis拦截器会拦截threadLocal
+  的值如果有值就会重新拼装sql再进行执行,完成分页
 ## 后记
 
 比较拙劣
