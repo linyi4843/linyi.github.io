@@ -1,0 +1,103 @@
+---
+layout:     post
+title:      "cas"
+subtitle:   " \"cas\""
+date:       2020-3-24 15:07:00
+author:     "linyi"
+header-img: "img/post-bg-alitrip.jpg"
+catalog: true
+tags:
+    - cas
+---
+
+> “Yeah It's on. ”
+
+
+cas java 主要由JNI实现, java native interface
+
+调用c语言来执行cpu的指令,而cpu则执行指令,"cmpchg"执行来进行比较替换的操作,这是一个原子性的操作
+
+在多核心情况下,会对"总线"加锁,cp加锁,保证
+
+缺陷: 
+
+多线程时只有一个线程可以执行,其他线程会随之等待,而在等待的时候,已经拿到了原值和,新值,
+
+这是最先进去的线程已经把值修改了,这样会导致后面其他的线程在进行对比是错误,再次进行获取值,while循环消耗性
+
+ABA:
+
+多线程状态下, 当你拿拿到的原值,并且在等待获取锁执行下一步操作时,其他线程比你抢先一步拿到cpu调度,讲原值修改成了新值,走了,然后第二个线程又比你先拿到cpu调度,进行了一些业务操作之后吧值改为了之前的值,就是你手里的值,第三次终于轮到你了,你发现你拿到的值和内存中的值依然一直,就去进行下一步的操作,殊不知这个值已经进行了一些改变
+
+ABA:问题解决
+
+原值 + 版本号  双判断解决
+
+JDK     AtomicStampReference<?>  可解决
+
+CAS java自行实现demo
+
+```java
+
+    package learn;
+    
+    /**
+     * Created with IDEA
+     *
+     * @author: linyi
+     * @Email: linyi4843@gmail.com
+     */
+    public class CompareAndSwap {
+        /**
+         * cas 原则: 原值 = 预期值 的情况下更新  新值
+         *
+         * 原值: count当前的值
+         * 预期值: count最新的值
+         * 新值: 需要更新的值
+         */
+    
+        /**
+         * 实时获取count的值,不会获取缓存值
+         */
+        volatile static int count = 0;
+    
+        /**
+         * 实现方法
+         */
+        public static void request(){
+            int oldValue = getCount();
+            if (!compareAndSwap(oldValue,oldValue + 1)){
+    
+            }
+        }
+    
+        /**
+         * 比较原值和预期值
+         */
+        public synchronized static boolean compareAndSwap(int oldValue,int newValue){
+            if (getCount() == oldValue) {
+                count = newValue;
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+    
+        /**
+         * 获取count值
+         */
+        public static int getCount(){
+            return count;
+        }
+    
+        public static void main(String[] args) {
+            for (int i = 0; i < 1000; i++) {
+                Thread thread = new Thread(CompareAndSwap::request);
+                thread.start();
+            }
+            System.out.println(count);
+        }
+    }
+
+```    

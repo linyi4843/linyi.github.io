@@ -1,0 +1,92 @@
+---
+layout:     post
+title:      "cas"
+subtitle:   " \"cas\""
+date:       2020-3-24 15:07:00
+author:     "linyi"
+header-img: "img/post-bg-alitrip.jpg"
+catalog: true
+tags:
+    - cas
+---
+
+> “Yeah It's on. ”
+
+![](img/1c.png)
+二叉树: 
+
+左边的储存的值都是小于根节点的,右边的储存的值都是大于根节点的
+
+删除操作时,选取大于当前节点的最小节点
+
+缺点:  依赖有序数组,
+
+数组没办法快速插入,也没办法扩容
+
+二叉搜索树: 
+
+如果数据比较极端就会变成链表   (可用AVL平衡树来解决该问题
+
+![](img/2c.png)
+
+二分查找算法
+
+```java
+    package learn;
+    
+    /**
+     * Created with IDEA
+     *
+     * @author: linyi
+     * @Email: linyi4843@gmail.com
+     */
+    public class BinarySearchTest {
+    
+        public static void main(String[] args) {
+            int[] arr = {1,2,3,4,5,6,7,8,9,10};
+            int data = 2;
+            int search = binarySearch(arr, data);
+            System.out.println(search);
+        }
+    
+        public static int binarySearch(int[] arr,int data){
+            //起始下标值
+            int low = 0;
+            //最大下标值
+            int height = arr.length - 1;
+    
+            while (low <= height){
+                // 计算出中间值下标
+                int mid = low + (height - low)/2;
+                if (arr[mid] < data){
+                    // 如果查找值大于中间值,则把起始下标值加1
+                    low = mid + 1;
+                }else if(arr[mid] == data){
+                    // 如果中间值等于要查找的值,直接返回下标
+                    return mid;
+                }else {
+                    // 如果查找值小于中间值,则把最大下标值减1
+                    height = mid - 1;
+                }
+            }
+            return -1;
+        }
+    }
+```    
+红黑树是在二叉树的基础上
+
+1,  根节点必须为黑色
+
+2, 红色节点下必须为黑色节点
+
+3, 两个红色节点不能相连
+
+LL双红 ,改变爸爸叔叔的节点为黑色,爷爷节点为红色,在进行右旋,将爷爷节点当做当前节点
+
+LR双红 进行左旋, 变成 LL双红 将爸爸节点当做当前节点 ↑
+
+RR双红 改变爸爸叔叔的节点为黑色,爷爷节点为红色,进行左旋当前节点
+
+RL双红 进行右旋, 变成 RR双红 将爸爸节点当做当前节点↑
+
+旋转完之后根据当前节点,判断是否有红红相连,然后再根据下一步做
