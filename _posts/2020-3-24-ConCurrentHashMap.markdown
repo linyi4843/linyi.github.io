@@ -1,6 +1,24 @@
+---
+layout:     post
+title:      "ConCurrentHashMap"
+subtitle:   " \"ConCurrentHashMap\""
+date:       2020-3-20 15:12:00
+author:     "linyi"
+header-img: "img/post-bg-alitrip.jpg"
+catalog: true
+tags:
+    - ConCurrentHashMap
+---
+
+> “Never give up. ”
+
+
+
+
+
 # ConCurrentHashMap 源码
 
-putVal ,
+putVal()
 
 ```java
 //  onlyIfAbsent true -> 冲突时不替换原数据,  false -> 替换原数据
