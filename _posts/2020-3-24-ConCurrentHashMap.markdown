@@ -18,7 +18,7 @@ tags:
 
 # ConCurrentHashMap 源码
 
-putVal()
+## putVal()
 
 ```java
 //  onlyIfAbsent true -> 冲突时不替换原数据,  false -> 替换原数据
@@ -120,7 +120,7 @@ final V putVal(K key, V value, boolean onlyIfAbsent) {
     }
 ```
 
-initTable  初始化tab
+## initTable  初始化tab
 ```java
     private final Node<K,V>[] initTable() {
     		// tab 当前tab引用  sc: 临时sizeCtl
@@ -159,7 +159,7 @@ initTable  初始化tab
             return tab;
         }
 ```
-addCount() 累加数据,或者扩容判断
+## addCount() 累加数据,或者扩容判断
 
 ```java
 private final void addCount(long x, int check) {
@@ -247,7 +247,7 @@ private final void addCount(long x, int check) {
     }
 ```
 
-transfer(), 扩容,协助扩容方法
+## transfer(), 扩容,协助扩容方法
 
 ```java
 private final void transfer(Node<K,V>[] tab, Node<K,V>[] nextTab) {
@@ -456,7 +456,7 @@ private final void transfer(Node<K,V>[] tab, Node<K,V>[] nextTab) {
     }
 ```
 
-put时发现正在扩容要参与进来
+## put时发现正在扩容要参与进来
 
 ```java
 final Node<K,V>[] helpTransfer(Node<K,V>[] tab, Node<K,V> f) {
@@ -487,7 +487,7 @@ final Node<K,V>[] helpTransfer(Node<K,V>[] tab, Node<K,V> f) {
     }
 ```
 
-get()
+## get()
 ```java
     public V get(Object key) {
     				//tab 当前 table
@@ -519,7 +519,7 @@ get()
             return null;
         }
 ```
-find() → fwd find
+## find() → fwd find
 
 ```java
     static final class ForwardingNode<K,V> extends Node<K,V> {
@@ -569,7 +569,7 @@ find() → fwd find
     }
 ```
 
-remove(),  套娃的后续方法,, 在成功删除红黑树节点之后,会直接转换为node普通链表,也没有进行长度判断,正常应该为6以下转为链表
+## remove(),  套娃的后续方法,, 在成功删除红黑树节点之后,会直接转换为node普通链表,也没有进行长度判断,正常应该为6以下转为链表
 
 ```java
 final V replaceNode(Object key, V value, Object cv) {
@@ -683,9 +683,9 @@ final V replaceNode(Object key, V value, Object cv) {
 
 ```
 
-treeBin节点,  写是独占锁,读是共享锁
+## treeBin节点,  写是独占锁,读是共享锁
 
-↓   treeBin节点元素含义
+### ↓   treeBin节点元素含义
 
 ```java
 static final class TreeBin<K,V> extends Node<K,V> {
@@ -708,7 +708,7 @@ static final class TreeBin<K,V> extends Node<K,V> {
 
 ```
 
-创建treeBin对象
+## 创建treeBin对象
 
 ```java
 TreeBin(TreeNode<K,V> b) {
@@ -786,7 +786,7 @@ TreeBin(TreeNode<K,V> b) {
 
 ```
 
-find()   get值的时候用到
+## find()   get值的时候用到
 
 ```java
 final Node<K,V> find(int h, Object k) {
@@ -837,7 +837,7 @@ final Node<K,V> find(int h, Object k) {
 
 ```
 
-putTreeVal
+## putTreeVal()
 
 ```java
 final TreeNode<K,V> putTreeVal(int h, K k, V v) {
@@ -909,7 +909,7 @@ final TreeNode<K,V> putTreeVal(int h, K k, V v) {
 
 ```
 
-lockRoot() ,unlockRoot() 调整红黑树时加锁解锁
+## lockRoot() ,unlockRoot() 调整红黑树时加锁解锁
 
 ```java
 private final void lockRoot() {
