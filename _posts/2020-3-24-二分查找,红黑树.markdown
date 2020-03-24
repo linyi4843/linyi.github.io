@@ -1,18 +1,18 @@
 ---
 layout:     post
-title:      "cas"
-subtitle:   " \"cas\""
+title:      "二分查找,红黑树学习"
+subtitle:   " \"二分查找\""
 date:       2020-3-24 15:07:00
 author:     "linyi"
 header-img: "img/post-bg-alitrip.jpg"
 catalog: true
 tags:
-    - cas
+    - tree
 ---
 
 > “Yeah It's on. ”
 
-![](img/1c.png)
+![](../img/1c.png)
 二叉树: 
 
 左边的储存的值都是小于根节点的,右边的储存的值都是大于根节点的
@@ -27,7 +27,7 @@ tags:
 
 如果数据比较极端就会变成链表   (可用AVL平衡树来解决该问题
 
-![](img/2c.png)
+![](../img/2c.png)
 
 二分查找算法
 
