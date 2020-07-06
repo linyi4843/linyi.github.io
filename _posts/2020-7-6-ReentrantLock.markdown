@@ -49,8 +49,8 @@ Node属性
         
                 // 因为node需要组建成 fifo 对列,所以 next 指向后置节点
                 volatile Node next;
-        
-              // 当前node封装的线程
+         
+               // 当前node封装的线程
                 volatile Thread thread;
         
                 // -- 未用到
@@ -246,13 +246,13 @@ static final class FairSync extends Sync {
 		
 		// 判断需要是否需要被挂起
 		private static boolean shouldParkAfterFailedAcquire(Node pred, Node node) {
-				// 获取当前状态
+        // 获取当前状态
         int ws = pred.waitStatus;
-				// 需要唤醒后继节点,然后后面被 (parkAndCheckInterrupt )park掉,等待唤醒
+        // 需要唤醒后继节点,然后后面被 (parkAndCheckInterrupt )park掉,等待唤醒
         if (ws == Node.SIGNAL)
             
             return true;
-				// 取消状态
+        // 取消状态
         if (ws > 0) {
            //  找爸爸,获取到对应的signal节点,并将中间的除对处理
             do {
@@ -261,7 +261,7 @@ static final class FairSync extends Sync {
 						// 当前节点为前节点的next
             pred.next = node;
         } else {
-	           // 如果当前状态为0,就会被设为 SIGNAL,继而下一次来执行上面的逻辑 
+           // 如果当前状态为0,就会被设为 SIGNAL,继而下一次来执行上面的逻辑 
             compareAndSetWaitStatus(pred, ws, Node.SIGNAL);
         }
         return false;
@@ -284,11 +284,11 @@ public void unlock() {
 
 // 解锁
 public final boolean release(int arg) {
-				// 尝试解锁
+        // 尝试解锁
         if (tryRelease(arg)) {
             Node h = head;
-						// 条件一 进来已经是最后一把锁了,头为空,投的状态不是默认状态
-						// 条件二  不成立时,说明后面一定有后继节点
+            // 条件一 进来已经是最后一把锁了,头为空,投的状态不是默认状态
+            // 条件二  不成立时,说明后面一定有后继节点
             if (h != null && h.waitStatus != 0)
 								// 唤醒后继线程
                 unparkSuccessor(h);
@@ -321,25 +321,25 @@ protected final boolean tryRelease(int releases) {
 private void unparkSuccessor(Node node) {
         // 头节点的状态
         int ws = node.waitStatus;
-				// SIGNAL 需要唤醒后继节点
+        // SIGNAL 需要唤醒后继节点
         if (ws < 0)
-						// 修改状态为默认状态0
+            // 修改状态为默认状态0
             compareAndSetWaitStatus(node, ws, 0);
 
         // 后继节点
         Node s = node.next;
-				// 节点空,1 可能是最后一个节点 2 新的节点正在入队,但还没有入队
-				// 条件二 : 当前节点状态为取消状态 ,需要找一个合适的节点唤醒
+        // 节点空,1 可能是最后一个节点 2 新的节点正在入队,但还没有入队
+        // 条件二 : 当前节点状态为取消状态 ,需要找一个合适的节点唤醒
         if (s == null || s.waitStatus > 0) {
             s = null;
-						// 从尾部遍历前置节点,寻找最近一个需要唤醒的节点
-						// 可能找不到
+            // 从尾部遍历前置节点,寻找最近一个需要唤醒的节点
+            // 可能找不到
             for (Node t = tail; t != null && t != node; t = t.prev)
                 if (t.waitStatus <= 0)
                     s = t;
-						// 找到唤醒,找不到啥也不干
+            // 找到唤醒,找不到啥也不干
         }
-				// 不为空直接唤醒
+        // 不为空直接唤醒
         if (s != null)
             LockSupport.unpark(s.thread);
     }
@@ -356,18 +356,18 @@ private void unparkSuccessor(Node node) {
 		// 具体逻辑
 		public final void acquireInterruptibly(int arg)
             throws InterruptedException {
-				// 被中断 抛出异常
+        // 被中断 抛出异常
         if (Thread.interrupted())
             throw new InterruptedException();
-				// 尝试获取锁
+        // 尝试获取锁
         if (!tryAcquire(arg))
-						// 获取到
+            // 获取到
             doAcquireInterruptibly(arg);
     }
 
 		private void doAcquireInterruptibly(int arg)
         throws InterruptedException {
-				// 入队
+        // 入队
         final Node node = addWaiter(Node.EXCLUSIVE);
         boolean failed = true;
         try {
@@ -394,48 +394,48 @@ private void unparkSuccessor(Node node) {
         // 不存在直接返回
         if (node == null)
             return;
-				// 当前node线程设置为空
+        // 当前node线程设置为空
         node.thread = null;
 
-	      // 获取取消排队节点 的前置节点
+      // 获取取消排队节点 的前置节点
         Node pred = node.prev;
-				// 获得一个正常的前置节点,防止前置节点也被中断
+        // 获得一个正常的前置节点,防止前置节点也被中断
         while (pred.waitStatus > 0)
             node.prev = pred = pred.prev;
 
-				// 正常的前置节点的后置节点
-				// 可能是当前节点,也可能不是当前节点,是其他的中断节点  
+        // 正常的前置节点的后置节点
+        // 可能是当前节点,也可能不是当前节点,是其他的中断节点  
         Node predNext = pred.next;
-				// 设置中断状态
+        // 设置中断状态
         node.waitStatus = Node.CANCELLED;
 				
-				// 条件一: 说明出队节点是尾节点tail  , 修改tail,为前置节点
+        // 条件一: 说明出队节点是尾节点tail  , 修改tail,为前置节点
         if (node == tail && compareAndSetTail(node, pred)) {
-						// 出队, pred.next设为null
+            // 出队, pred.next设为null
             compareAndSetNext(pred, predNext, null);
         } else {
-						// 状态
+            // 状态
             int ws;
-						// 当前节点不是head.next几点,也不是tail节点
+            // 当前节点不是head.next几点,也不是tail节点
             if (pred != head &&
-								// 成立: 当前节点的前置节点是 需要唤醒后置节点的 不成立: 可能为0,也可能前置节点被中断了
+                // 成立: 当前节点的前置节点是 需要唤醒后置节点的 不成立: 可能为0,也可能前置节点被中断了
                 ((ws = pred.waitStatus) == Node.SIGNAL ||
-									// 如果状态时小于0,则修改状态为 唤醒后继节点为-1
+                // 如果状态时小于0,则修改状态为 唤醒后继节点为-1
                  (ws <= 0 && compareAndSetWaitStatus(pred, ws, Node.SIGNAL))) &&
                 pred.thread != null)
-					// if 所做的事,将pred.next节点指向 node.next节点,所以要保证pred状态为-1 signal
+                // if 所做的事,将pred.next节点指向 node.next节点,所以要保证pred状态为-1 signal
 				 {
-								// 出队节点的下一个节点
+                // 出队节点的下一个节点
                 Node next = node.next;
-								// 后置节点不为空且状态为中断状态
+                // 后置节点不为空且状态为中断状态
                 if (next != null && next.waitStatus <= 0)
-										// 设置pred.next节点为 node.next 
+                    // 设置pred.next节点为 node.next 
                     compareAndSetNext(pred, predNext, next);
             } else {
-								// 唤醒后置节点
+                // 唤醒后置节点
                 unparkSuccessor(node);
             }
-				    // 将当前节点指向自己的next节点
+            // 将当前节点指向自己的next节点
             node.next = node; // help GC
         }
     }
@@ -451,24 +451,24 @@ private void unparkSuccessor(Node node) {
 
 判断当前是不是头结点的后置节点,是后置节点则可以竞争锁,不然则挂起,等待被唤醒
 
-Condition
+### Condition
 
 ```java
 		
 		public final void await() throws InterruptedException {
-						// 判断当前线程是否被中断 ,如被中断 直接返回抛出中断异常
+            // 判断当前线程是否被中断 ,如被中断 直接返回抛出中断异常
             if (Thread.interrupted())
                 throw new InterruptedException();                                                                                                 
-						// 加入condition队列
+            // 加入condition队列
             Node node = addConditionWaiter();
-						// 释放所有锁  , 如果加锁被挂起,则肯定不会被唤醒
+            // 释放所有锁  , 如果加锁被挂起,则肯定不会被唤醒
             int savedState = fullyRelease(node);
-						// 0 condition队列挂起期间 中未收到中断信号
-						// -1 condition队列挂起期间 收到了中断信号
-						// 1 condition队列挂起期间 未收到中断信号, 但迁移到阻塞队列时 收到了中断信号
+            // 0 condition队列挂起期间 中未收到中断信号
+            // -1 condition队列挂起期间 收到了中断信号
+            // 1 condition队列挂起期间 未收到中断信号, 但迁移到阻塞队列时 收到了中断信号
             int interruptMode = 0;
-						// isOnSyncQueue true表示已经迁移到阻塞队列
-						// false 表示还未迁移,需要继续挂起
+            // isOnSyncQueue true表示已经迁移到阻塞队列
+            // false 表示还未迁移,需要继续挂起
             while (!isOnSyncQueue(node)) {
 								// 挂起
                 LockSupport.park(this);
@@ -476,70 +476,70 @@ Condition
                 if ((interruptMode = checkInterruptWhileWaiting(node)) != 0)
                     break;
             }
-						// 已经进入阻塞队列了
-						// 条件1 : 说明当前线程被中断过,
-						// 条件2 : interruptMode != THROW_IE 成立，说明当前node在条件队列内 未发生过中断
-						// 设置 interruptMode = REINTERRUPT
+            // 已经进入阻塞队列了
+            // 条件1 : 说明当前线程被中断过,
+            // 条件2 : interruptMode != THROW_IE 成立，说明当前node在条件队列内 未发生过中断
+            // 设置 interruptMode = REINTERRUPT
             if (acquireQueued(node, savedState) && interruptMode != THROW_IE)
                 interruptMode = REINTERRUPT;
-						// node在条件队列内时 如果被外部线程 中断唤醒时，会加入到阻塞队列，但是并未设置nextWaiter = null。
+            // node在条件队列内时 如果被外部线程 中断唤醒时，会加入到阻塞队列，但是并未设置nextWaiter = null。
             if (node.nextWaiter != null) // clean up if cancelled
                 unlinkCancelledWaiters();
 						
-						// 条件成立：说明挂起期间 发生过中断（1.条件队列内的挂起 2.条件队列之外的挂起）
+            // 条件成立：说明挂起期间 发生过中断（1.条件队列内的挂起 2.条件队列之外的挂起）
             if (interruptMode != 0)
                 reportInterruptAfterWait(interruptMode);
         }
 
 			// 入 condition 队列末尾
 			private Node addConditionWaiter() {
-						// 尾节点引用
+            // 尾节点引用
             Node t = lastWaiter;
             // 1 当前队列已经有元素了
-						// 2 node在条件队列时 CONDITION(-2)
-						// t.waitStatus != Node.CONDITION 成立说明 当前node发生中断了 
+            // 2 node在条件队列时 CONDITION(-2)
+            // t.waitStatus != Node.CONDITION 成立说明 当前node发生中断了 
             if (t != null && t.waitStatus != Node.CONDITION) {
-								// 清理所有取消状态的节点
+                // 清理所有取消状态的节点
                 unlinkCancelledWaiters();
-								// 更新新的队尾
+                // 更新新的队尾
                 t = lastWaiter;
             }
-						// 创建当前线程的node节点,状态为 -2
+            // 创建当前线程的node节点,状态为 -2
             Node node = new Node(Thread.currentThread(), Node.CONDITION);
-						// 尾节点为空
+            // 尾节点为空
             if (t == null)
-								// 说明当前队列为空,当前线程为第一个节点
+                // 说明当前队列为空,当前线程为第一个节点
                 firstWaiter = node;
             else
-								// 已有队列,追加队尾
+                // 已有队列,追加队尾
                 t.nextWaiter = node;
-						// 设为尾节点 
+            // 设为尾节点 
             lastWaiter = node;
             return node;
         }
 		
 		// 清理所有取消状态的节点
 		private void unlinkCancelledWaiters() {
-						// 头节点
+            // 头节点
             Node t = firstWaiter;
-						// 当前链表上一个正常状态的node节点
+            // 当前链表上一个正常状态的node节点
             Node trail = null;
-						// 不为空
+            // 不为空
             while (t != null) {
-								// 头结点的下一个节点
+                // 头结点的下一个节点
                 Node next = t.nextWaiter;
-								// 为取消状态
+                // 为取消状态
                 if (t.waitStatus != Node.CONDITION) {
-										// 置空
+                    // 置空
                     t.nextWaiter = null;
-										// 条件成立：说明遍历到的节点还未碰到过正常节点..
+                    // 条件成立：说明遍历到的节点还未碰到过正常节点..
                     if (trail == null)
-												//更新firstWaiter指针为下个节点就可以
+                        //更新firstWaiter指针为下个节点就可以
                         firstWaiter = next;
                     else
-												// 让上一个正常节点指向 取消节点的 下一个节点..中间有问题的节点 被跳过去了..
+                        // 让上一个正常节点指向 取消节点的 下一个节点..中间有问题的节点 被跳过去了..
                         trail.nextWaiter = next;
-										//条件成立：当前节点为队尾节点了，更新lastWaiter 指向最后一个正常节点 就Ok了
+                    //条件成立：当前节点为队尾节点了，更新lastWaiter 指向最后一个正常节点 就Ok了
                     if (next == null)
                         lastWaiter = trail;
                 }
@@ -551,66 +551,66 @@ Condition
 
 // 完全释放锁
 final int fullyRelease(Node node) {
-				// 完全释放锁是否成功  
+        // 完全释放锁是否成功  
         boolean failed = true;
         try {
-						// 获取一共几把锁
+            // 获取一共几把锁
             int savedState = getState();
-						// 解锁 
+            // 解锁 
             if (release(savedState)) {
-								// 返回 当前线程返回的state值
+                // 返回 当前线程返回的state值
                 failed = false;
                 return savedState;
             } else {
                 throw new IllegalMonitorStateException();
             }
         } finally {
-						// 抛出异常/解锁失败
+            // 抛出异常/解锁失败
             if (failed)
-								// 设为取消状态
+                // 设为取消状态
                 node.waitStatus = Node.CANCELLED;
         }
     }
    
 	// 是否在队列中
   final boolean isOnSyncQueue(Node node) {
-				// 条件成立说明一定在条件队列,因为signal,迁移节点是,会先将状态改为0
-				// 不成立
-				// 1 node.waitStatus = 0 当前节点已经被signal了
-				// 2 node.waitStatus =  1 当前线程未持有锁调用await方法,最终会将状态改为0
+        // 条件成立说明一定在条件队列,因为signal,迁移节点是,会先将状态改为0
+        // 不成立
+        // 1 node.waitStatus = 0 当前节点已经被signal了
+        // 2 node.waitStatus =  1 当前线程未持有锁调用await方法,最终会将状态改为0
 
-				// node.prev == null  signal是先修改状态,再迁移节点
+        // node.prev == null  signal是先修改状态,再迁移节点
         if (node.waitStatus == Node.CONDITION || node.prev == null)
             return false;
 
-				// 执行到这里会出现那种情况
-				// node.waitStatus != Node.CONDITION 且 node.prev != null 可以排除 node.waitStatus = 1
-				// 为什么可以排除取消状态,signal不会把取消状态的节点迁移走
-				// 条件成立 已经成功入队到阻塞队列 ,且当前节点后面已经有其他node了
+        // 执行到这里会出现那种情况
+        // node.waitStatus != Node.CONDITION 且 node.prev != null 可以排除 node.waitStatus = 1
+        // 为什么可以排除取消状态,signal不会把取消状态的节点迁移走
+        // 条件成立 已经成功入队到阻塞队列 ,且当前节点后面已经有其他node了
  
         if (node.next != null) // If has successor, it must be on queue
             return true;
 	      
-				// 从队尾寻找与当前node相同的节点,找到返回true,未找到返回false
+        // 从队尾寻找与当前node相同的节点,找到返回true,未找到返回false
         return findNodeFromTail(node);
 }
 
 			// 判断是否在队列中
 			private int checkInterruptWhileWaiting(Node node) {
-						// 是否中断过
+            // 是否中断过
             return Thread.interrupted() ?
-								// 这个方法只有在线程是被中断唤醒时 才会调用！
+                // 这个方法只有在线程是被中断唤醒时 才会调用！
                 (transferAfterCancelledWait(node) ? THROW_IE : REINTERRUPT) :
                 0;
        }
 
 		// 不在队列 则入队
 		final boolean transferAfterCancelledWait(Node node) {
-				// 成立则说明一定在CONDITION队列中
+        // 成立则说明一定在CONDITION队列中
         if (compareAndSetWaitStatus(node, Node.CONDITION, 0)) {
-						// 入队
+            // 入队
             enq(node);
-						// 被中断
+            // 被中断
             return true;
         }
         /*
@@ -619,13 +619,13 @@ final int fullyRelease(Node node) {
          * incomplete transfer is both rare and transient, so just
          * spin.
          */
-				// 执行到这的几中情况
+        // 执行到这的几中情况
         // 当前node已经被外部线程调用signal 方法迁移到阻塞队列中了
-				// 同上,但是正在迁移中...
+        // 同上,但是正在迁移中...
         while (!isOnSyncQueue(node))
-						// 释放cpu 重试
+            // 释放cpu 重试
             Thread.yield();
-				// 当前节点被中断唤醒时,不在条件队列中了
+        // 当前节点被中断唤醒时,不在条件队列中了
         return false;
     }
 
@@ -640,12 +640,12 @@ final int fullyRelease(Node node) {
 
 		// 唤醒
 		public final void signal() {
-						// 如果不是当前线程直接报错
+            // 如果不是当前线程直接报错
             if (!isHeldExclusively())
                 throw new IllegalMonitorStateException();
-						// 头结点引用
+            // 头结点引用
             Node first = firstWaiter;
-						// 不为空
+            // 不为空
             if (first != null)
                 doSignal(first);
         }
@@ -654,14 +654,14 @@ final int fullyRelease(Node node) {
 		private void doSignal(Node first) {
 				
             do {
-								// 头结点要出队,判断当前节点是否最后一个结点
+                // 头结点要出队,判断当前节点是否最后一个结点
                 if ( (firstWaiter = first.nextWaiter) == null)
-										// 尾结点置空
+                    // 尾结点置空
                     lastWaiter = null;
-								// 头结点开出队,断开引用,gc
+                // 头结点开出队,断开引用,gc
                 first.nextWaiter = null;
-						// 条件1 transferForSignal(first) 是否已在阻塞队列中,
-						// 条件2 `
+            // 条件1 transferForSignal(first) 是否已在阻塞队列中,
+            // 条件2 `
             } while (!transferForSignal(first) &&
                      (first = firstWaiter) != null);
         }
@@ -670,9 +670,9 @@ final int fullyRelease(Node node) {
         /*
          * If cannot change waitStatus, the node has been cancelled.
          */
-				// 修改当前节点的为默认状态当前节点马上就要进入阻塞队列了
-				// false  挂起期间,当前node被其他线程中断唤醒过,也会进入阻塞队列
-				//  await 时,未持有锁,最终线程对应的node会设置为取消状态
+        // 修改当前节点的为默认状态当前节点马上就要进入阻塞队列了
+        // false  挂起期间,当前node被其他线程中断唤醒过,也会进入阻塞队列
+        //  await 时,未持有锁,最终线程对应的node会设置为取消状态
         if (!compareAndSetWaitStatus(node, Node.CONDITION, 0))
             return false;
 
@@ -682,16 +682,16 @@ final int fullyRelease(Node node) {
          * attempt to set waitStatus fails, wake up to resync (in which
          * case the waitStatus can be transiently and harmlessly wrong).
          */
-				// 如阻塞队列
+        // 如阻塞队列
         Node p = enq(node);
-				// 入队节点前置节点的状态
+        // 入队节点前置节点的状态
         int ws = p.waitStatus;
-				// 条件1 : 是取消状态,唤醒当前节点
-				// 条件2 : true,修改状态成功
-				// false 当前驱node对应的线程 是 lockInterrupt入队的node时，是会响应中断的，外部线程给前驱线程中断信号之后
+        // 条件1 : 是取消状态,唤醒当前节点
+        // 条件2 : true,修改状态成功
+        // false 当前驱node对应的线程 是 lockInterrupt入队的node时，是会响应中断的，外部线程给前驱线程中断信号之后
         // 前驱node会将状态修改为 取消状态，并且执行 出队逻辑..
         if (ws > 0 || !compareAndSetWaitStatus(p, ws, Node.SIGNAL))
-						// 状态只要不是 0 , -1 就唤醒当前线程
+            // 状态只要不是 0 , -1 就唤醒当前线程
             LockSupport.unpark(node.thread);
         return true;
     }

@@ -42,21 +42,21 @@ public final void acquireSharedInterruptibly(int arg)
             throw new InterruptedException();
 				// 
         if (tryAcquireShared(arg) < 0)
-						// 挂起
+            // 挂起
             doAcquireSharedInterruptibly(arg);
     }
 
 // 
 protected int tryAcquireShared(int acquires) {
             for (;;) {
-								// 队列有人直接返回,这是公平模式,不能插队
+                // 队列有人直接返回,这是公平模式,不能插队
                 if (hasQueuedPredecessors())
                     return -1;
-								// 获取信号量剩余数量
+                // 获取信号量剩余数量
                 int available = getState();
-								// 减去当前所需之后,是否够用
+                // 减去当前所需之后,是否够用
                 int remaining = available - acquires;
-								// 负数 不够用,返回挂起
+                // 负数 不够用,返回挂起
                 if (remaining < 0 ||
                     compareAndSetState(available, remaining))
                     return remaining;
@@ -65,34 +65,34 @@ protected int tryAcquireShared(int acquires) {
 
 private void doAcquireSharedInterruptibly(int arg)
         throws InterruptedException {
-				 // 入队
+         // 入队
         final Node node = addWaiter(Node.SHARED);
         boolean failed = true;
         try {
             for (;;) {
-								// 前置节点获取
+                // 前置节点获取
                 final Node p = node.predecessor();
-								// 头结点
+                // 头结点
                 if (p == head) {
-										// 再次判断信号量是否够用
+                    // 再次判断信号量是否够用
                     int r = tryAcquireShared(arg);
-										// 够用
+                    // 够用
                     if (r >= 0) {
-												// 设置自己为头结点,并唤醒后后继结点
+                        // 设置自己为头结点,并唤醒后后继结点
                         setHeadAndPropagate(node, r);
                         p.next = null; // help GC
                         failed = false;
                         return;
                     }
                 }
-								// 找一个好爹然后挂起
+              // 找一个好爹然后挂起
                 if (shouldParkAfterFailedAcquire(p, node) &&
-										// 挂起
+                    // 挂起
                     parkAndCheckInterrupt())
                     throw new InterruptedException();
             }
         } finally {
-						// 响应中断出队
+            // 响应中断出队
             if (failed)
                 cancelAcquire(node);
         }
@@ -113,13 +113,13 @@ public final boolean releaseShared(int arg) {
 //
 protected final boolean tryReleaseShared(int releases) {
             for (;;) {
-								// 当前信号量个数
+                // 当前信号量个数
                 int current = getState();
-								// 越界了
+                // 越界了
                 int next = current + releases;
                 if (next < current) // overflow
                     throw new Error("Maximum permit count exceeded");
-								// 加入释放的信号量
+                // 加入释放的信号量
                 if (compareAndSetState(current, next))
                     return true;
             }
